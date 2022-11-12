@@ -109,11 +109,12 @@ function User(username, init = true) {
         });
 	
 		console.log('\t\t\tqueryComment(' + this.name + ')');
-		let json = results.json
-		json.data.before = (json.data.children[0]) ? json.data.children[0].data.name : null;
+		let json = results.json;
+		if (json.data) { 
+		  json.data.before = (json.data.children?.[0]) ? json.data.children[0].data.name : null;
 		this.saveComments(results.type, results.json);
-
-		if (json.data[results.type]) {
+		}
+		if (json?.data?.[results.type]) {
 			this.getCommentsJson(results.type, json.data[type]);
 		} else {
 			this.evalComments();
@@ -126,7 +127,7 @@ function User(username, init = true) {
         console.log('\t\t\tsaveComments(' + type + ')');
 
         let saved = [];
-        json.data.children.forEach((comment) => {
+        json.data?.children.forEach((comment) => {
             let save = {
                 // parent_id:		comment.data.parent_id,
                 // permalink:		comment.data.permalink,
@@ -607,9 +608,9 @@ function User(username, init = true) {
 
     this.saveAbout = function(json) {
         console.log('\t\taboutSave():\t\t', this.name);
-        this.about.link_karma = json.data.link_karma;
-        this.about.comment_karma = json.data.comment_karma;
-        this.about.created = json.data.created;
+        this.about.link_karma = json.data?.link_karma;
+        this.about.comment_karma = json.data?.comment_karma;
+        this.about.created = json.data?.created;
         this.about.updated = datenow();
     };
 

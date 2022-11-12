@@ -168,18 +168,20 @@ img.deleteIcon {
 	text-align:			center;
 }
 
-.ceddit {
-	width:				14px;
-	height:				14px;
-	position: 			relative;
-	top:				4px;
+.post-restorer {
+	width:             14px;
+	height:	           14px;
+	position: 	   relative;
+	background-repeat: no-repeat;
+	background-size:   contain;
+	display:           inline-block;
+	opacity:           .5;
+	transition:        opacity 0.1s ease-in-out;
+	vertical-align:    middle !important;
 }
 
-.removeddit {
-	width:				14px;
-	height:				14px;
-	position: 			relative;
-	top:				4px;
+.post-restorer:hover {
+	opacity:           1.0;
 }
 
 .rptBorder {
