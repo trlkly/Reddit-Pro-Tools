@@ -30,7 +30,7 @@ $(document).ready(function() {
     getSettings();
 
     addPostRestorerLink();
-    addPatreonLink();
+    //addPatreonLink();
 
     // give the settings and the db a extra blink of time to load
     setTimeout(function() {
