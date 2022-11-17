@@ -1,7 +1,7 @@
 "use strict";
 
-// const printLogs = false;
-const printLogs = true;
+const printLogs = false;
+//const printLogs = true;
 
 var settings;
 var db;
@@ -23,8 +23,6 @@ let domainsWorking = false;
 // add google analytics
 ga('create', 'UA-124046785-1', 'auto');
 ga('send', 'pageview');
-
-
 
 $(document).ready(function() {
     getSettings();

@@ -1,5 +1,10 @@
 "use strict";
 
+const silentMode = true;
+let consoleLog = (...args) => { 
+ if (!silentMode) { console.log(...args) }
+}
+
 // get a list of users on the page
 function getAuthors() {
     let authors = [];
@@ -74,7 +79,7 @@ function User(username, init = true) {
     this.getComments = function() {
         // wait for the user to load from the db
         if (this.stats.comments.updated == null) {
-            // console.log('getComments() waiting on user from db:', this.name);
+            // consoleLog('getComments() waiting on user from db:', this.name);
             setTimeout(() => {
                 this.getComments();
             }, 100);
@@ -82,7 +87,7 @@ function User(username, init = true) {
         }
         printLog('\tgetComments:', this.name);
 
-        // console.log(this.comments);
+        // consoleLog(this.comments);
 
         if (!this.comments || !this.comments[0] || !this.comments[0].name) {
             this.comments = [];
@@ -108,7 +113,7 @@ function User(username, init = true) {
             user: this
         });
 	
-		console.log('\t\t\tqueryComment(' + this.name + ')');
+		consoleLog('\t\t\tqueryComment(' + this.name + ')');
 		let json = results.json;
 		if (json.data) { 
 		  json.data.before = (json.data.children?.[0]) ? json.data.children[0].data.name : null;
@@ -124,7 +129,7 @@ function User(username, init = true) {
 
 
     this.saveComments = function(type, json) {
-        console.log('\t\t\tsaveComments(' + type + ')');
+        consoleLog('\t\t\tsaveComments(' + type + ')');
 
         let saved = [];
         json.data?.children.forEach((comment) => {
@@ -193,7 +198,7 @@ function User(username, init = true) {
         printLog('\t\t\tevalTags():', this.name);
         // wait for the user info to be updated
         if (this.about.created == null) {
-            // console.log('evalTags() waiting on user about:', this.name);
+            // consoleLog('evalTags() waiting on user about:', this.name);
             setTimeout(() => {
                 this.evalTags();
             }, 100);
@@ -322,7 +327,7 @@ function User(username, init = true) {
         printLog('\t\t\t\taddTags():', this.name);
 
         let userElems = this.getUserElemements();
-        // console.log(userElems);
+        // consoleLog(userElems);
 
         userElems.forEach((userElem) => {
             let wrapper = this.tagWrapper();
@@ -586,13 +591,13 @@ function User(username, init = true) {
     this.getAbout = async function() {
         // wait for the db to load the user
         if (this.about.updated == null) {
-            // console.log('waiting on user from db:', this.name);
+            // consoleLog('waiting on user from db:', this.name);
             setTimeout(() => {
                 this.getAbout();
             }, 100);
             return;
         }
-        console.log('\taboutGet():\t\t', this.name);
+        consoleLog('\taboutGet():\t\t', this.name);
 
         // if we didn't have about data saved or if the about data is outdated...
         if (this.about.link_karma == undefined || datenow() - this.about.updated > cacheTime) {
@@ -607,7 +612,7 @@ function User(username, init = true) {
     };
 
     this.saveAbout = function(json) {
-        console.log('\t\taboutSave():\t\t', this.name);
+        consoleLog('\t\taboutSave():\t\t', this.name);
         this.about.link_karma = json.data?.link_karma;
         this.about.comment_karma = json.data?.comment_karma;
         this.about.created = json.data?.created;
@@ -618,14 +623,14 @@ function User(username, init = true) {
 
 
     this.getDb = function() {
-        console.log('\tgetDb():', this.name);
+        consoleLog('\tgetDb():', this.name);
 
         let transaction = db.transaction([table]);
 
         // transaction errors
         transaction.onerror = function(e) {
-            console.log('user.dbGet transaction error:');
-            console.log(e);
+            consoleLog('user.dbGet transaction error:');
+            consoleLog(e);
         };
 
         let os = transaction.objectStore(table);
@@ -633,7 +638,7 @@ function User(username, init = true) {
 
         // request errors
         req.onerror = function(e) {
-            console.log('user.dbGet error: ' + table + '!');
+            consoleLog('user.dbGet error: ' + table + '!');
         };
 
         req.onsuccess = () => {
@@ -650,7 +655,7 @@ function User(username, init = true) {
 
 
     this.saveDb = function() {
-        // console.log('\tsaveDb():', this.name);
+        // consoleLog('\tsaveDb():', this.name);
         var os = db.transaction([table], "readwrite").objectStore(table);
 
         var save = {
@@ -663,7 +668,7 @@ function User(username, init = true) {
         var req = os.put(save);
 
         req.onerror = function(event) {
-            console.log('user.dbSave error: ' + table + ' - ' + this.name + '!');
+            consoleLog('user.dbSave error: ' + table + ' - ' + this.name + '!');
         };
     }
 
